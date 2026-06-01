@@ -36,7 +36,7 @@ ul{list-style:none}
 .nav-logo-img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--glass-border);transition:border-color var(--transition-speed)}
 .nav-logo:hover .nav-logo-img{border-color:var(--accent)}
 .nav-links{display:flex;gap:8px}
-.nav-link{padding:8px 16px;border-radius:8px;font-size:.9rem;font-weight:500;color:var(--text);transition:all .25s ease;position:relative}
+.nav-link{padding:8px 16px;border-radius:8px;font-size:.9rem;font-weight:500;color:var(--text);transition:all .25s ease}
 .nav-link:hover,.nav-link.active{color:var(--text-bright);background:var(--glass-bg)}
 .nav-actions{display:flex;align-items:center;gap:12px}
 .theme-toggle{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);transition:all .25s ease}
