@@ -49,15 +49,16 @@ resize();draw();
 })();
 
 /* Firebase */
-const firebaseConfig = {
-  apiKey: "AIzaSyAPoMnl-UEdgHvizAsoBvx4GyR42zYtxsw",
-  authDomain: "portfolio-aafd6.firebaseapp.com",
-  projectId: "portfolio-aafd6",
-  storageBucket: "portfolio-aafd6.firebasestorage.app",
-  messagingSenderId: "970948912325",
-  appId: "1:970948912325:web:d3e57fb8f2ea237cad3cac"
+const firebaseConfig={
+apiKey:"AIzaSyAPoMnl-UEdgHvizAsoBvx4GyR42zYtxsw",
+authDomain:"portfolio-aafd6.firebaseapp.com",
+projectId:"portfolio-aafd6",
+storageBucket:"portfolio-aafd6.firebasestorage.app",
+messagingSenderId:"970948912325",
+appId:"1:970948912325:web:d3e57fb8f2ea237cad3cac"
 };
-
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
 
 /* Theme */
 const themeToggle=$('#themeToggle'),html=document.documentElement;
@@ -186,6 +187,3 @@ feedback.className='form-feedback error';
 }
 submitBtn.disabled=false;submitBtn.textContent='Send Message';
 });
-
-
-
