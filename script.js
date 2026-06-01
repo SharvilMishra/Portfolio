@@ -1,11 +1,54 @@
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 
+/* Galaxy Background */
+(function(){
+const c=document.getElementById('galaxy'),ctx=c.getContext('2d');
+let w,h,scrollY=0,stars=[];
+const cols=["rgba(255,255,255,","rgba(200,210,255,","rgba(180,190,255,","rgba(160,170,240,","rgba(140,150,220,"];
+function resize(){
+const hero=document.getElementById('home');
+w=c.width=hero.offsetWidth;h=c.height=hero.offsetHeight;init();
+}
+function init(){
+stars=[];
+const count=Math.floor((w*h)/1800);
+for(let i=0;i<count;i++){
+stars.push({
+x:Math.random()*w,y:Math.random()*h,
+r:Math.random()*1.8+.2,
+layer:Math.random()<.5?0:Math.random()<.6?1:2,
+op:Math.random()*.7+.3,
+tw:Math.random()*6.28,
+tws:Math.random()*.015+.005,
+c:cols[Math.random()*cols.length|0]
+});
+}
+}
+function draw(){
+ctx.clearRect(0,0,w,h);
+const speeds=[.02,.08,.2];
+for(let p of stars){
+p.tw+=p.tws;
+const tw=Math.sin(p.tw)*.3+.7;
+const yOff=scrollY*speeds[p.layer];
+let dy=(p.y-yOff)%h;
+if(dy<0)dy+=h;
+const a=p.op*tw;
+ctx.beginPath();ctx.arc(p.x,dy,p.r,0,6.28);
+ctx.fillStyle=p.c+a+')';ctx.fill();
+if(p.r>1.4){
+ctx.beginPath();ctx.arc(p.x,dy,p.r*3,0,6.28);
+ctx.fillStyle=p.c+(a*.08)+')';ctx.fill();
+}
+}
+requestAnimationFrame(draw);
+}
+window.addEventListener('scroll',()=>{scrollY=window.pageYOffset;},{passive:true});
+window.addEventListener('resize',resize);
+resize();draw();
+})();
 
-
-
-
-
-
-
+/* Firebase */
 const firebaseConfig = {
   apiKey: "AIzaSyAPoMnl-UEdgHvizAsoBvx4GyR42zYtxsw",
   authDomain: "portfolio-aafd6.firebaseapp.com",
@@ -15,6 +58,8 @@ const firebaseConfig = {
   appId: "1:970948912325:web:d3e57fb8f2ea237cad3cac"
 };
 
+
+/* Theme */
 const themeToggle=$('#themeToggle'),html=document.documentElement;
 const savedTheme=localStorage.getItem('theme')||'dark';
 html.setAttribute('data-theme',savedTheme);
@@ -23,6 +68,7 @@ const curr=html.getAttribute('data-theme'),next=curr==='dark'?'light':'dark';
 html.setAttribute('data-theme',next);localStorage.setItem('theme',next);
 });
 
+/* Hamburger */
 const hamburger=$('#hamburger'),navLinks=$('#navLinks');
 hamburger.addEventListener('click',()=>{
 hamburger.classList.toggle('active');navLinks.classList.toggle('open');
@@ -33,9 +79,11 @@ hamburger.classList.remove('active');navLinks.classList.remove('open');
 hamburger.setAttribute('aria-expanded','false');
 }));
 
+/* Sticky navbar */
 const navbar=$('#navbar');
 window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>50));
 
+/* Active section */
 const sections=$$('section[id]');
 const navObs=new IntersectionObserver(entries=>{
 entries.forEach(e=>{if(e.isIntersecting){
@@ -46,16 +94,19 @@ if(a)a.classList.add('active');
 },{rootMargin:'-40% 0px -55% 0px'});
 sections.forEach(s=>navObs.observe(s));
 
+/* Reveal animations */
 const revealObs=new IntersectionObserver(entries=>{
 entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target);}});
 },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
  $$('.reveal').forEach(el=>revealObs.observe(el));
 
+/* Safety: force visible if already in viewport */
 setTimeout(()=>{$$('.reveal:not(.visible)').forEach(el=>{
 const r=el.getBoundingClientRect();
 if(r.top<window.innerHeight&&r.bottom>0)el.classList.add('visible');
 });},300);
 
+/* Typing effect */
 const titles=['Software Developer','Web Developer','Game Developer'];
 let ti=0,ci=0,deleting=false;
 const typeEl=$('#typingText');
@@ -68,6 +119,7 @@ setTimeout(typeLoop,deleting?40:80);
 }
 typeLoop();
 
+/* Counter animation */
 let counterDone=false;
 const counterObs=new IntersectionObserver(entries=>{
 entries.forEach(e=>{if(e.isIntersecting&&!counterDone){
@@ -82,6 +134,7 @@ const timer=setInterval(()=>{c+=step;if(c>=target){c=target;clearInterval(timer)
 const aboutSection=$('#about');
 if(aboutSection)counterObs.observe(aboutSection);
 
+/* GitHub API */
 async function fetchGitHub(){
 try{
 const[userRes,repoRes]=await Promise.all([
@@ -102,6 +155,7 @@ return`<div class="repo-card"><h4>${r.name}</h4><p>${r.description||'No descript
 }
 fetchGitHub();
 
+/* Contact form */
 const form=$('#contactForm'),submitBtn=$('#submitBtn'),feedback=$('#formFeedback');
 function setError(id,msg){const el=$(`#${id}`);el.textContent=msg;el.previousElementSibling.classList.add('error');}
 function clearErrors(){$$('.form-error').forEach(e=>e.textContent='');$$('.form-group input,.form-group textarea').forEach(e=>e.classList.remove('error'));}
@@ -132,3 +186,6 @@ feedback.className='form-feedback error';
 }
 submitBtn.disabled=false;submitBtn.textContent='Send Message';
 });
+
+
+
